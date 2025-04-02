@@ -60,3 +60,4 @@ C:\Users\kutel\source\repos\console\Bot_BJ\obj\Debug\net8.0\refint\Bot.dll
 C:\Users\kutel\source\repos\console\Bot_BJ\obj\Debug\net8.0\Bot.pdb
 C:\Users\kutel\source\repos\console\Bot_BJ\obj\Debug\net8.0\Bot.genruntimeconfig.cache
 C:\Users\kutel\source\repos\console\Bot_BJ\obj\Debug\net8.0\ref\Bot.dll
+C:\Users\kutel\source\repos\console\Bot_BJ\obj\Debug\net8.0\Bot.sourcelink.json

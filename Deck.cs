@@ -9,6 +9,7 @@ namespace BlackJack
     internal class Deck
     {
         private readonly Card[] _deck;
+        // Pointer to the next card to deal in the deck
         private int cardPtr;
 
         public Deck() {

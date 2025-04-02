@@ -11,8 +11,10 @@ namespace Bot
     {
         private readonly long _id;
         private readonly string _name;
-        private int balance;
-        private List<Card> cards;
+        private int _balance;
+        
+        // Cards in player's hand
+        private List<Card> _cards;
         public bool Stand { get; set; }
         public long Id { get { return _id; } }
         public string Name { get { return _name; } }
@@ -21,25 +23,25 @@ namespace Bot
         {
             _id = id;
             _name = name;
-            balance = 500;
-            cards = new List<Card>();
+            _balance = 500;
+            _cards = new List<Card>();
             Stand = false;
         }
 
         public override string ToString()
         {
-            return $"Player with id: {_id}, name: {_name}, balance {balance}";
+            return $"Player with id: {_id}, name: {_name}, balance {_balance}";
         }
 
         public void TakeCard(Card card)
         {
-            cards.Add(card);
+            _cards.Add(card);
         }
 
         public int ShowValue()
         {
             int s = 0;
-            foreach (Card card in cards)
+            foreach (Card card in _cards)
             {
                 s += card.GetValue();
             }
@@ -47,18 +49,20 @@ namespace Bot
             return s;
         }
 
+        #region Unused(money focus)
         //public void MakeTurn()
         //{
 
         //}
+        #endregion
 
         public string PrintCards()
         {
             string res = "";
-            foreach (Card card in cards)
+            foreach (Card card in _cards)
             {
                 res += card.ToString();
-                if (card != cards.Last())
+                if (card != _cards.Last())
                     res += ", ";
             }
             return res;

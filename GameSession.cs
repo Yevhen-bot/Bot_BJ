@@ -8,23 +8,34 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Bot
 {
+    // GameSession class is responsible for managing the game session
     class GameSession
     {
-        public List<Player> players { get; private set; }
-        public Player dealer { get; private set; }
-        private Deck deck;
+        public List<Player> Players { get; private set; }
+        public Player Dealer { get; private set; }
+        private readonly Deck _deck;
 
-        public int Players {  get { return players.Count; } }
+        public int PlayersCount {  get { return Players.Count; } }
+        public bool IsStarted { get; set; }
+        public GameSession()
+        {
+            Players = new();
+            Dealer = new(-1, "dealer");
+            Dealer.Stand = true;
+            _deck = new Deck();
+            IsStarted = false;
+        }
 
+        // Check if all players have made their turn
         public bool ToEnd()
         {
-            return players.All((x) => x.Stand);
+            return Players.All((x) => x.Stand);
         }
 
         public Player GetPlayer(long id)
         {
             Player r = null;
-            foreach(var p in players)
+            foreach(var p in Players)
             {
                 if(id == p.Id)
                 {
@@ -36,33 +47,27 @@ namespace Bot
             return r;
         }
 
-        public GameSession()
-        {
-            players = new();
-            dealer = new(-1, "dealer");
-            dealer.Stand = true;
-            deck = new Deck();
-        }
-
         public void AddPlayer(Player player)
         {
-            players.Add(player);
+            Players.Add(player);
         }
 
         public Card Start()
         {
             for(int i = 0; i < 2; i++)
             {
-                foreach (Player player in players)
+                foreach (Player player in Players)
                 {
-                    player.TakeCard(deck.DealCard());
+                    player.TakeCard(_deck.DealCard());
                 }
             }
 
-            var c = deck.DealCard();
-            dealer.TakeCard(c);
+            var c = _deck.DealCard();
+            Dealer.TakeCard(c);
             return c;
         }
+
+        #region Unused(money focus)
 
         //public bool Turn()
         //{
@@ -79,13 +84,16 @@ namespace Bot
         //    return toplay;
         //}
 
+        #endregion
+
+        // Method that implements how the dealer operates
         public List<Card> DealerLogic()
         {
             List<Card> list = new List<Card>();
-            while (dealer.ShowValue() < 17)
+            while (Dealer.ShowValue() < 17)
             {
-                var c = deck.DealCard();
-                dealer.TakeCard(c);
+                var c = _deck.DealCard();
+                Dealer.TakeCard(c);
                 list.Add(c);
             }
 
@@ -94,28 +102,28 @@ namespace Bot
 
         public Player End()
         {
-            players.Sort((p1, p2) => p2.ShowValue().CompareTo(p1.ShowValue()));
+            Players.Sort((p1, p2) => p2.ShowValue().CompareTo(p1.ShowValue()));
             int best = 0;
             Player b = null;
-            for(int i = 0;i < players.Count;i++)
+            for(int i = 0;i < Players.Count;i++)
             {
-                if(players[i].ShowValue() <= 21 && players[i].ShowValue() > best)
+                if(Players[i].ShowValue() <= 21 && Players[i].ShowValue() > best)
                 {
-                    b = players[i];
+                    b = Players[i];
                     best = b.ShowValue();
                     break;
                 }
             }
 
-            if (best == 0 || (best < dealer.ShowValue() && dealer.ShowValue() <= 21))
-                b = dealer;
+            if (best == 0 || (best < Dealer.ShowValue() && Dealer.ShowValue() <= 21))
+                b = Dealer;
 
             return b;
         }
 
         public void HitPlayer(Player p)
         {
-            p.TakeCard(deck.DealCard());
+            p.TakeCard(_deck.DealCard());
         }
     }
 }
