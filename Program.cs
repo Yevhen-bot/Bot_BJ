@@ -144,6 +144,7 @@ namespace Bot
                 await bot.SendMessage(chatId, "The game is LIVE!");
                 return;
             }
+            ActiveGames[chatId].IsStarted = true;
 
             var dc = ActiveGames[chatId].Start();
             await bot.SendMessage(chatId, "Players got their cards");

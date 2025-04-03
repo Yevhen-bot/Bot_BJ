@@ -27,10 +27,14 @@ namespace BlackJack
     {
         private readonly Suit _suit;
         private readonly Rank _rank;
+        
+        public bool IsAce { get; private set; }
+
         public Card(Suit suit, Rank rank)
         {
             _suit = suit;
             _rank = rank;
+            IsAce = (rank==Rank.RAce);
         }
         public override string ToString()
         {
@@ -86,7 +90,6 @@ namespace BlackJack
             return -1;
         }
 
-        // TO DO --- Method to implement the value of Ace
         public int Ace()
         {
             return 0;

@@ -12,9 +12,10 @@ namespace Bot
         private readonly long _id;
         private readonly string _name;
         private int _balance;
-        
+        private int _aces;
         // Cards in player's hand
         private List<Card> _cards;
+
         public bool Stand { get; set; }
         public long Id { get { return _id; } }
         public string Name { get { return _name; } }
@@ -26,6 +27,7 @@ namespace Bot
             _balance = 500;
             _cards = new List<Card>();
             Stand = false;
+            _aces = 0;
         }
 
         public override string ToString()
@@ -36,6 +38,8 @@ namespace Bot
         public void TakeCard(Card card)
         {
             _cards.Add(card);
+            if (card.IsAce)
+                _aces++;
         }
 
         public int ShowValue()
@@ -44,6 +48,13 @@ namespace Bot
             foreach (Card card in _cards)
             {
                 s += card.GetValue();
+            }
+
+            // If the player has an ace and the value is over 21, we can use the ace as 1
+            while(s > 21 && _aces > 0)
+            {
+                s -= 10;
+                _aces--;
             }
 
             return s;
